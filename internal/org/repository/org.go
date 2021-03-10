@@ -21,9 +21,16 @@ func NewRepository(conn *sqlx.DB) *Repository {
 	}
 }
 
+const createQuery = `INSERT INTO org (name, creator, updater) VALUES (:name, :creator, :updater)`
+
 // Create -.
-func (r *Repository) Create(ctx context.Context, o domain.Org) error {
-	return nil
+func (r *Repository) Create(ctx context.Context, org domain.Org) error {
+	org.Creator = ""
+	org.Updater = ""
+
+	_, err := r.conn.NamedExecContext(ctx, createQuery, org)
+
+	return err
 }
 
 // ReadAll -.
@@ -42,7 +49,7 @@ func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint
 }
 
 // UpdateByID -.
-func (r *Repository) UpdateByID(ctx context.Context, id uint64, o domain.Org) (domain.Org, error) {
+func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
 	return domain.Org{}, nil
 }
 
