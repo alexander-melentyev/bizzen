@@ -37,9 +37,9 @@ const readAllQuery = `SELECT * FROM org WHERE deleted_at IS NULL LIMIT $1 OFFSET
 
 // ReadAll -.
 func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
-	var org []domain.Org
+	var res []domain.Org
 
-	return org, r.conn.SelectContext(ctx, &org, readAllQuery, limit, offset)
+	return res, r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset)
 }
 
 const readByIDQuery = `SELECT * FROM org WHERE deleted_at IS NULL AND id = $1`
