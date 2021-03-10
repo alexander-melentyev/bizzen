@@ -21,7 +21,8 @@ func NewRepository(conn *sqlx.DB) *Repository {
 	}
 }
 
-const createQuery = `INSERT INTO org (name, creator, updater) VALUES (:name, :creator, :updater)`
+const createQuery = `INSERT INTO org (name, creator, updater)
+VALUES (:name, :creator, :updater)`
 
 // Create -.
 func (r *Repository) Create(ctx context.Context, org domain.Org) (err error) {
@@ -29,50 +30,76 @@ func (r *Repository) Create(ctx context.Context, org domain.Org) (err error) {
 	org.Updater = ""
 
 	_, err = r.conn.NamedExecContext(ctx, createQuery, org)
+
 	return
 }
 
-const readAllQuery = `SELECT * FROM org WHERE deleted_at IS NULL LIMIT $1 OFFSET $2`
+const readAllQuery = `SELECT *
+FROM org
+WHERE deleted_at IS NULL
+LIMIT $1 OFFSET $2`
 
 // ReadAll -.
 func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) (res []domain.Org, err error) {
 	err = r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset)
+
 	return
 }
 
-const readByIDQuery = `SELECT * FROM org WHERE deleted_at IS NULL AND id = $1`
+const readByIDQuery = `SELECT *
+FROM org
+WHERE deleted_at IS NULL AND id = $1`
 
 // ReadByID -.
 func (r *Repository) ReadByID(ctx context.Context, id uint64) (res domain.Org, err error) {
 	err = r.conn.GetContext(ctx, &res, readByIDQuery, id)
+
 	return
 }
 
-const readHistoryByIDQuery = `SELECT * FROM org_history WHERE deleted_at IS NULL AND id = $1 LIMIT $2 OFFSET $3`
+const readHistoryByIDQuery = `SELECT *
+FROM org_history
+WHERE deleted_at IS NULL AND id = $1
+LIMIT $2 OFFSET $3`
 
 // ReadHistoryByID -.
 func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) (res []domain.Org, err error) {
 	err = r.conn.SelectContext(ctx, &res, readHistoryByIDQuery, id, limit, offset)
+
 	return
 }
 
-const updateByIDQuery = `UPDATE org SET name = :name, updater = :updater WHERE deleted_at IS NULL AND id = :id RETURNING *`
+const updateByIDQuery = `UPDATE org
+SET name = :name, updater = :updater
+WHERE deleted_at IS NULL AND id = :id
+RETURNING *`
 
 // UpdateByID -.
-func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (res domain.Org, err error) {
+func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
 	org.ID = id
 	org.Updater = ""
 
 	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
-	err = stmt.GetContext(ctx, &res, org)
-	return
+	if err != nil {
+		return domain.Org{}, err
+	}
+
+	var res domain.Org
+
+	return res, stmt.GetContext(ctx, &res, org)
 }
 
-const deleteByIDQuery = `UPDATE org SET deleter = :deleter, deleted_at = NOW() WHERE deleted_at IS NULL AND id = :id RETURNING *`
+const deleteByIDQuery = `UPDATE org
+SET deleter = :deleter, deleted_at = NOW()
+WHERE deleted_at IS NULL AND id = :id
+RETURNING *`
 
 // SoftDeleteByID -.
-func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) (err error) {
+func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) error {
 	stmt, err := r.conn.PrepareNamedContext(ctx, deleteByIDQuery)
+	if err != nil {
+		return err
+	}
 
 	var org domain.Org
 
@@ -80,6 +107,5 @@ func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) (err error) 
 	org.Deleter.Valid = true
 	org.Deleter.String = ""
 
-	err = stmt.GetContext(ctx, &org, org)
-	return
+	return stmt.GetContext(ctx, &org, org)
 }
