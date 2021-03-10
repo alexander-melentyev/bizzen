@@ -1,5 +1,6 @@
-CREATE TABLE organizations (
+CREATE TABLE org (
     id BIGSERIAL PRIMARY KEY,
+    name VARCHAR (50) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     creator VARCHAR (50) NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -8,9 +9,9 @@ CREATE TABLE organizations (
     deleter VARCHAR (50)
 );
 
-CREATE TABLE organizations_history (
-    row_id BIGSERIAL PRIMARY KEY,
-    organization_id INTEGER NOT NULL,
+CREATE TABLE org_history (
+    org_id BIGINT NOT NULL,
+    name VARCHAR (50) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     creator VARCHAR (50) NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -19,39 +20,41 @@ CREATE TABLE organizations_history (
     deleter VARCHAR (50)
 );
 
-CREATE INDEX ON organizations_history(organization_id, updated_at);
+CREATE INDEX ON org_history(org_id, updated_at);
 
-CREATE FUNCTION organizations_history()
+CREATE FUNCTION org_history()
     RETURNS TRIGGER
     LANGUAGE PLPGSQL
     AS
 $$
-    BEGIN
-        INSERT INTO organizations_history (
-            organization_id,
-            created_at,
-            creator,
-            updated_at,
-            updater,
-            deleted_at,
-            deleter
-        )
-        VALUES (
-            NEW.id,
-            NEW.created_at,
-            NEW.creator,
-            NEW.updated_at,
-            NEW.updater,
-            NEW.deleted_at,
-            NEW.deleter
-        );
+BEGIN
+    INSERT INTO org_history (
+        org_id,
+        name,
+        created_at,
+        creator,
+        updated_at,
+        updater,
+        deleted_at,
+        deleter
+    )
+    VALUES (
+        NEW.id,
+        NEW.name,
+        NEW.created_at,
+        NEW.creator,
+        NEW.updated_at,
+        NEW.updater,
+        NEW.deleted_at,
+        NEW.deleter
+    );
 
-        RETURN NEW;
-    END
+    RETURN NEW;
+END
 $$;
 
-CREATE TRIGGER organizations_history_trigger
+CREATE TRIGGER org_history_trigger
     AFTER INSERT OR UPDATE
-    ON organizations
+    ON org
     FOR EACH ROW
-    EXECUTE PROCEDURE organizations_history();
+    EXECUTE PROCEDURE org_history();
