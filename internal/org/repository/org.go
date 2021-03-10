@@ -42,9 +42,13 @@ func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domai
 	return org, r.conn.SelectContext(ctx, &org, readAllQuery, limit, offset)
 }
 
+const readByIDQuery = `SELECT * FROM org WHERE deleted_at IS NULL AND id = $1`
+
 // ReadByID -.
 func (r *Repository) ReadByID(ctx context.Context, id uint64) (domain.Org, error) {
-	return domain.Org{}, nil
+	var res domain.Org
+
+	return res, r.conn.GetContext(ctx, &res, readByIDQuery, id)
 }
 
 // ReadHistoryByID -.
