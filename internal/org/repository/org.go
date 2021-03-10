@@ -68,7 +68,18 @@ func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) 
 	return
 }
 
+const deleteByIDQuery = `UPDATE org SET deleter = :deleter, deleted_at = NOW() WHERE deleted_at IS NULL AND id = :id RETURNING *`
+
 // SoftDeleteByID -.
-func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) error {
-	return nil
+func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) (err error) {
+	stmt, err := r.conn.PrepareNamedContext(ctx, deleteByIDQuery)
+
+	var org domain.Org
+
+	org.ID = id
+	org.Deleter.Valid = true
+	org.Deleter.String = ""
+
+	err = stmt.GetContext(ctx, &org, org)
+	return
 }
