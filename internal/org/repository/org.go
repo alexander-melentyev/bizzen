@@ -24,31 +24,28 @@ func NewRepository(conn *sqlx.DB) *Repository {
 const createQuery = `INSERT INTO org (name, creator, updater) VALUES (:name, :creator, :updater)`
 
 // Create -.
-func (r *Repository) Create(ctx context.Context, org domain.Org) error {
+func (r *Repository) Create(ctx context.Context, org domain.Org) (err error) {
 	org.Creator = ""
 	org.Updater = ""
 
-	_, err := r.conn.NamedExecContext(ctx, createQuery, org)
-
-	return err
+	_, err = r.conn.NamedExecContext(ctx, createQuery, org)
+	return
 }
 
 const readAllQuery = `SELECT * FROM org WHERE deleted_at IS NULL LIMIT $1 OFFSET $2`
 
 // ReadAll -.
-func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
-	var res []domain.Org
-
-	return res, r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset)
+func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) (res []domain.Org, err error) {
+	err = r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset)
+	return
 }
 
 const readByIDQuery = `SELECT * FROM org WHERE deleted_at IS NULL AND id = $1`
 
 // ReadByID -.
-func (r *Repository) ReadByID(ctx context.Context, id uint64) (domain.Org, error) {
-	var res domain.Org
-
-	return res, r.conn.GetContext(ctx, &res, readByIDQuery, id)
+func (r *Repository) ReadByID(ctx context.Context, id uint64) (res domain.Org, err error) {
+	err = r.conn.GetContext(ctx, &res, readByIDQuery, id)
+	return
 }
 
 const readHistoryByIDQuery = `SELECT * FROM org_history WHERE deleted_at IS NULL AND id = $1 LIMIT $2 OFFSET $3`
