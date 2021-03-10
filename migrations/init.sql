@@ -10,7 +10,7 @@ CREATE TABLE org (
 );
 
 CREATE TABLE org_history (
-    org_id BIGINT NOT NULL,
+    id BIGINT NOT NULL,
     name VARCHAR (50) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     creator VARCHAR (50) NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE org_history (
     deleter VARCHAR (50)
 );
 
-CREATE INDEX ON org_history(org_id, updated_at);
+CREATE INDEX ON org_history(id, updated_at);
 
 CREATE FUNCTION org_history()
     RETURNS TRIGGER
@@ -29,7 +29,7 @@ CREATE FUNCTION org_history()
 $$
 BEGIN
     INSERT INTO org_history (
-        org_id,
+        id,
         name,
         created_at,
         creator,
