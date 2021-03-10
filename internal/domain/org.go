@@ -25,7 +25,7 @@ type OrgRepository interface {
 // OrgUseCase - biz usecases.
 type OrgUseCase interface {
 	Create(ctx context.Context, o Org) error
-	ReadAll(ctx context.Context) ([]Org, error)
+	ReadAll(ctx context.Context, limit, offset uint64) ([]Org, error)
 	ReadByID(ctx context.Context, id uint64) (Org, error)
 	ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]Org, error)
 	UpdateByID(ctx context.Context, id uint64, o Org) (Org, error)
