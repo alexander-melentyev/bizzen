@@ -56,9 +56,16 @@ func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint
 	return
 }
 
+const updateByIDQuery = `UPDATE org SET name = :name, updater = :updater WHERE deleted_at IS NULL AND id = :id RETURNING *`
+
 // UpdateByID -.
-func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
-	return domain.Org{}, nil
+func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (res domain.Org, err error) {
+	org.ID = id
+	org.Updater = ""
+
+	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
+	err = stmt.GetContext(ctx, &res, org)
+	return
 }
 
 // SoftDeleteByID -.
