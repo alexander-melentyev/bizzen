@@ -51,9 +51,12 @@ func (r *Repository) ReadByID(ctx context.Context, id uint64) (domain.Org, error
 	return res, r.conn.GetContext(ctx, &res, readByIDQuery, id)
 }
 
+const readHistoryByIDQuery = `SELECT * FROM org_history WHERE deleted_at IS NULL AND id = $1 LIMIT $2 OFFSET $3`
+
 // ReadHistoryByID -.
-func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]domain.Org, error) {
-	return nil, nil
+func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) (res []domain.Org, err error) {
+	err = r.conn.SelectContext(ctx, &res, readHistoryByIDQuery, id, limit, offset)
+	return
 }
 
 // UpdateByID -.
