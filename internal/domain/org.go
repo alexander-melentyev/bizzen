@@ -12,11 +12,11 @@ type Org struct {
 
 // OrgRepository - org repository.
 type OrgRepository interface {
-	Create(ctx context.Context, o Org) error
+	Create(ctx context.Context, org Org) error
 	ReadAll(ctx context.Context, limit, offset uint64) ([]Org, error)
 	ReadByID(ctx context.Context, id uint64) (Org, error)
 	ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]Org, error)
-	UpdateByID(ctx context.Context, id uint64, o Org) (Org, error)
+	UpdateByID(ctx context.Context, id uint64, org Org) (Org, error)
 	SoftDeleteByID(ctx context.Context, id uint64) error
 }
 
@@ -24,10 +24,10 @@ type OrgRepository interface {
 
 // OrgUseCase - biz usecases.
 type OrgUseCase interface {
-	Create(ctx context.Context, o Org) error
+	Create(ctx context.Context, org Org) error
 	ReadAll(ctx context.Context, limit, offset uint64) ([]Org, error)
 	ReadByID(ctx context.Context, id uint64) (Org, error)
 	ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]Org, error)
-	UpdateByID(ctx context.Context, id uint64, o Org) (Org, error)
+	UpdateByID(ctx context.Context, id uint64, org Org) (Org, error)
 	SoftDeleteByID(ctx context.Context, id uint64) error
 }
