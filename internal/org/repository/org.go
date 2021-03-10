@@ -33,9 +33,13 @@ func (r *Repository) Create(ctx context.Context, org domain.Org) error {
 	return err
 }
 
+const readAllQuery = `SELECT * FROM org WHERE deleted_at IS NULL LIMIT $1 OFFSET $2`
+
 // ReadAll -.
 func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
-	return nil, nil
+	var org []domain.Org
+
+	return org, r.conn.SelectContext(ctx, &org, readAllQuery, limit, offset)
 }
 
 // ReadByID -.
