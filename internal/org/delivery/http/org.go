@@ -13,13 +13,13 @@ import (
 
 // Handler -.
 type Handler struct {
-	useCase domain.OrgUseCase
+	org domain.OrgUseCase
 }
 
 // NewHandler -.
-func NewHandler(r *gin.RouterGroup, s domain.OrgUseCase) {
+func NewHandler(r *gin.RouterGroup, o domain.OrgUseCase) {
 	h := &Handler{
-		useCase: s,
+		org: o,
 	}
 
 	org := r.Group("org")
@@ -43,7 +43,7 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
-	if err := h.useCase.Create(c.Request.Context(), org); err != nil {
+	if err := h.org.Create(c.Request.Context(), org); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 
 		return
@@ -62,7 +62,7 @@ func (h *Handler) ReadAll(c *gin.Context) {
 		return
 	}
 
-	res, err := h.useCase.ReadAll(c.Request.Context(), p.Limit, p.Offset)
+	res, err := h.org.ReadAll(c.Request.Context(), p.Limit, p.Offset)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 
@@ -84,7 +84,7 @@ func (h *Handler) ReadByID(c *gin.Context) {
 		return
 	}
 
-	res, err := h.useCase.ReadByID(c.Request.Context(), id.ID)
+	res, err := h.org.ReadByID(c.Request.Context(), id.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.AbortWithStatus(http.StatusNotFound)
@@ -118,7 +118,7 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 		return
 	}
 
-	res, err := h.useCase.ReadHistoryByID(c.Request.Context(), id.ID, p.Limit, p.Offset)
+	res, err := h.org.ReadHistoryByID(c.Request.Context(), id.ID, p.Limit, p.Offset)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 
@@ -148,7 +148,7 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 		return
 	}
 
-	res, err := h.useCase.UpdateByID(c.Request.Context(), id.ID, org)
+	res, err := h.org.UpdateByID(c.Request.Context(), id.ID, org)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.AbortWithStatus(http.StatusNotFound)
@@ -174,7 +174,7 @@ func (h *Handler) SoftDeleteByID(c *gin.Context) {
 		return
 	}
 
-	if err := h.useCase.SoftDeleteByID(c.Request.Context(), id.ID); err != nil {
+	if err := h.org.SoftDeleteByID(c.Request.Context(), id.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.AbortWithStatus(http.StatusNotFound)
 		} else {

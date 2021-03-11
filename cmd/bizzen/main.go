@@ -30,6 +30,7 @@ func main() {
 
 	orgRepo := _orgRepo.NewRepository(conn)
 	orgUseCase := _orgUseCase.NewUseCase(orgRepo)
+
 	_orgHandler.NewHandler(v1, orgUseCase)
 
 	if err := r.Run(); err != nil {
