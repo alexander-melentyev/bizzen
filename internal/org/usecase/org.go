@@ -8,44 +8,44 @@ import (
 
 // UseCase -.
 type UseCase struct {
-	repo domain.OrgRepository
+	r domain.OrgRepository
 }
 
 var _ domain.OrgUseCase = (*UseCase)(nil)
 
 // NewUseCase -.
-func NewUseCase(repo domain.OrgRepository) *UseCase {
+func NewUseCase(r domain.OrgRepository) *UseCase {
 	return &UseCase{
-		repo: repo,
+		r: r,
 	}
 }
 
 // Create -.
-func (uc *UseCase) Create(ctx context.Context, o domain.Org) error {
-	return nil
+func (uc *UseCase) Create(ctx context.Context, org domain.Org) error {
+	return uc.r.Create(ctx, org)
 }
 
 // ReadAll -.
 func (uc *UseCase) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
-	return nil, nil
+	return uc.r.ReadAll(ctx, limit, offset)
 }
 
 // ReadByID -.
 func (uc *UseCase) ReadByID(ctx context.Context, id uint64) (domain.Org, error) {
-	return domain.Org{}, nil
+	return uc.r.ReadByID(ctx, id)
 }
 
 // ReadHistoryByID -.
 func (uc *UseCase) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]domain.Org, error) {
-	return nil, nil
+	return uc.r.ReadHistoryByID(ctx, id, limit, offset)
 }
 
 // UpdateByID -.
-func (uc *UseCase) UpdateByID(ctx context.Context, id uint64, o domain.Org) (domain.Org, error) {
-	return domain.Org{}, nil
+func (uc *UseCase) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
+	return uc.r.UpdateByID(ctx, id, org)
 }
 
 // SoftDeleteByID -.
 func (uc *UseCase) SoftDeleteByID(ctx context.Context, id uint64) error {
-	return nil
+	return uc.r.SoftDeleteByID(ctx, id)
 }
