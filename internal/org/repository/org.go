@@ -59,10 +59,14 @@ FROM org
 WHERE deleted_at IS NULL AND id = $1`
 
 // ReadByID -.
-func (r *Repository) ReadByID(ctx context.Context, id uint64) (res domain.Org, err error) {
-	err = r.conn.GetContext(ctx, &res, readByIDQuery, id)
+func (r *Repository) ReadByID(ctx context.Context, id uint64) (domain.Org, error) {
+	var res domain.Org
 
-	return
+	if err := r.conn.GetContext(ctx, &res, readByIDQuery, id); err != nil {
+		return domain.Org{}, fmt.Errorf("failed to read org by ID: %w", err)
+	}
+
+	return res, nil
 }
 
 const readHistoryByIDQuery = `SELECT *
