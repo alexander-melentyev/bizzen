@@ -44,10 +44,14 @@ WHERE deleted_at IS NULL
 LIMIT $1 OFFSET $2`
 
 // ReadAll -.
-func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) (res []domain.Org, err error) {
-	err = r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset)
+func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
+	var res []domain.Org
 
-	return
+	if err := r.conn.SelectContext(ctx, &res, readAllQuery, limit, offset); err != nil {
+		return nil, fmt.Errorf("failed to read all org: %w", err)
+	}
+
+	return res, nil
 }
 
 const readByIDQuery = `SELECT *
