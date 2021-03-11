@@ -8,14 +8,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Repository -.
+// Repository - repository structure.
 type Repository struct {
 	conn *sqlx.DB
 }
 
 var _ domain.OrgRepository = (*Repository)(nil)
 
-// NewRepository -.
+// NewRepository - repository initialization.
 func NewRepository(conn *sqlx.DB) *Repository {
 	return &Repository{
 		conn: conn,
@@ -25,7 +25,7 @@ func NewRepository(conn *sqlx.DB) *Repository {
 const createQuery = `INSERT INTO org (name, creator, updater)
 VALUES (:name, :creator, :updater)`
 
-// Create -.
+// Create - creating a new organization.
 func (r *Repository) Create(ctx context.Context, org domain.Org) error {
 	org.Creator = ""
 	org.Updater = ""
@@ -43,7 +43,7 @@ FROM org
 WHERE deleted_at IS NULL
 LIMIT $1 OFFSET $2`
 
-// ReadAll -.
+// ReadAll - getting a organizations list.
 func (r *Repository) ReadAll(ctx context.Context, limit, offset uint64) ([]domain.Org, error) {
 	var res []domain.Org
 
@@ -58,7 +58,7 @@ const readByIDQuery = `SELECT *
 FROM org
 WHERE deleted_at IS NULL AND id = $1`
 
-// ReadByID -.
+// ReadByID - getting organization by ID.
 func (r *Repository) ReadByID(ctx context.Context, id uint64) (domain.Org, error) {
 	var res domain.Org
 
@@ -74,7 +74,7 @@ FROM org_history
 WHERE deleted_at IS NULL AND id = $1
 LIMIT $2 OFFSET $3`
 
-// ReadHistoryByID -.
+// ReadHistoryByID - getting organization row changes in table.
 func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]domain.Org, error) {
 	var res []domain.Org
 
@@ -90,7 +90,7 @@ SET name = :name, updater = :updater, updated_at = NOW()
 WHERE deleted_at IS NULL AND id = :id
 RETURNING *`
 
-// UpdateByID -.
+// UpdateByID - updating organization data.
 func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
 	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
 	if err != nil {
@@ -114,7 +114,7 @@ SET deleter = :deleter, deleted_at = NOW()
 WHERE deleted_at IS NULL AND id = :id
 RETURNING *`
 
-// SoftDeleteByID -.
+// SoftDeleteByID - filling deletion data.
 func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) error {
 	stmt, err := r.conn.PrepareNamedContext(ctx, deleteByIDQuery)
 	if err != nil {
