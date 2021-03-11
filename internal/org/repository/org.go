@@ -26,13 +26,16 @@ const createQuery = `INSERT INTO org (name, creator, updater)
 VALUES (:name, :creator, :updater)`
 
 // Create -.
-func (r *Repository) Create(ctx context.Context, org domain.Org) (err error) {
+func (r *Repository) Create(ctx context.Context, org domain.Org) error {
 	org.Creator = ""
 	org.Updater = ""
 
-	_, err = r.conn.NamedExecContext(ctx, createQuery, org)
+	_, err := r.conn.NamedExecContext(ctx, createQuery, org)
+	if err != nil {
+		return fmt.Errorf("failed to create org: %w", err)
+	}
 
-	return
+	return nil
 }
 
 const readAllQuery = `SELECT *
