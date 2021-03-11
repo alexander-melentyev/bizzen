@@ -76,13 +76,13 @@ RETURNING *`
 
 // UpdateByID -.
 func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
-	org.ID = id
-	org.Updater = ""
-
 	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
 	if err != nil {
 		return domain.Org{}, err
 	}
+
+	org.ID = id
+	org.Updater = ""
 
 	var res domain.Org
 
