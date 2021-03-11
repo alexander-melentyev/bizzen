@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Org -.
+// Org - database table structure sorted by types.
 type Org struct {
 	ID        uint64         `db:"id" json:"id"`
 	Name      string         `db:"name" json:"name"`
