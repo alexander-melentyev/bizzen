@@ -56,7 +56,7 @@ func (h *Handler) Create(c *gin.Context) {
 func (h *Handler) ReadAll(c *gin.Context) {
 	var p query.Pagination
 
-	if err := c.ShouldBind(&p); err != nil {
+	if err := c.ShouldBindQuery(&p); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 
 		return
@@ -112,7 +112,7 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 
 	var p query.Pagination
 
-	if err := c.ShouldBind(&p); err != nil {
+	if err := c.ShouldBindQuery(&p); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 
 		return
