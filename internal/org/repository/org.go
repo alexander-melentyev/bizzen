@@ -103,7 +103,7 @@ RETURNING *`
 func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) error {
 	stmt, err := r.conn.PrepareNamedContext(ctx, deleteByIDQuery)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create prepare statement for soft delete org by ID: %w", err)
 	}
 
 	var org domain.Org
@@ -112,5 +112,9 @@ func (r *Repository) SoftDeleteByID(ctx context.Context, id uint64) error {
 	org.Deleter.Valid = true
 	org.Deleter.String = ""
 
-	return stmt.GetContext(ctx, &org, org)
+	if err := stmt.GetContext(ctx, &org, org); err != nil {
+		return fmt.Errorf("failed to soft delete org by ID: %w", err)
+	}
+
+	return nil
 }
