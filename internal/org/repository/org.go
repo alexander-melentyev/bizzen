@@ -86,7 +86,7 @@ func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint
 }
 
 const updateByIDQuery = `UPDATE org
-SET name = :name, updater = :updater
+SET name = :name, updater = :updater, updated_at = NOW()
 WHERE deleted_at IS NULL AND id = :id
 RETURNING *`
 
