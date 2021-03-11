@@ -75,10 +75,14 @@ WHERE deleted_at IS NULL AND id = $1
 LIMIT $2 OFFSET $3`
 
 // ReadHistoryByID -.
-func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) (res []domain.Org, err error) {
-	err = r.conn.SelectContext(ctx, &res, readHistoryByIDQuery, id, limit, offset)
+func (r *Repository) ReadHistoryByID(ctx context.Context, id, limit, offset uint64) ([]domain.Org, error) {
+	var res []domain.Org
 
-	return
+	if err := r.conn.SelectContext(ctx, &res, readHistoryByIDQuery, id, limit, offset); err != nil {
+		return nil, fmt.Errorf("failed to read org history by ID: %w", err)
+	}
+
+	return res, nil
 }
 
 const updateByIDQuery = `UPDATE org
