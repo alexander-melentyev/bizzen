@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alexander-melentyev/bizzen/internal/domain"
 	"github.com/jmoiron/sqlx"
@@ -78,7 +79,7 @@ RETURNING *`
 func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
 	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
 	if err != nil {
-		return domain.Org{}, err
+		return domain.Org{}, fmt.Errorf("failed to create prepare statement for update org by ID: %w", err)
 	}
 
 	org.ID = id
@@ -86,7 +87,11 @@ func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) 
 
 	var res domain.Org
 
-	return res, stmt.GetContext(ctx, &res, org)
+	if err := stmt.GetContext(ctx, &res, org); err != nil {
+		return domain.Org{}, fmt.Errorf("failed to update org by ID: %w", err)
+	}
+
+	return res, nil
 }
 
 const deleteByIDQuery = `UPDATE org
