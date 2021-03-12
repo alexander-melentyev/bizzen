@@ -11,12 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Handler -.
+// Handler - handler structure.
 type Handler struct {
 	org domain.OrgUseCase
 }
 
-// NewHandler -.
+// NewHandler - handler initialization.
 func NewHandler(r *gin.RouterGroup, o domain.OrgUseCase) {
 	h := &Handler{
 		org: o,
