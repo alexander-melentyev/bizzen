@@ -26,7 +26,7 @@ const createQuery = `INSERT INTO org (name, creator, updater)
 VALUES (:name, :creator, :updater)`
 
 // Create - creating a new organization.
-func (r *Repository) Create(ctx context.Context, org domain.Org) error {
+func (r *Repository) Create(ctx context.Context, org domain.OrgDTO) error {
 	org.Creator = ""
 	org.Updater = ""
 
@@ -91,7 +91,7 @@ WHERE deleted_at IS NULL AND id = :id
 RETURNING *`
 
 // UpdateByID - updating organization data.
-func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
+func (r *Repository) UpdateByID(ctx context.Context, id uint64, org domain.OrgDTO) (domain.Org, error) {
 	stmt, err := r.conn.PrepareNamedContext(ctx, updateByIDQuery)
 	if err != nil {
 		return domain.Org{}, fmt.Errorf("failed to create prepare statement for update org by ID: %w", err)

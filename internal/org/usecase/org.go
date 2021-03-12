@@ -21,7 +21,7 @@ func NewUseCase(r domain.OrgRepository) *UseCase {
 }
 
 // Create -.
-func (uc *UseCase) Create(ctx context.Context, org domain.Org) error {
+func (uc *UseCase) Create(ctx context.Context, org domain.OrgDTO) error {
 	return uc.r.Create(ctx, org)
 }
 
@@ -41,7 +41,7 @@ func (uc *UseCase) ReadHistoryByID(ctx context.Context, id, limit, offset uint64
 }
 
 // UpdateByID -.
-func (uc *UseCase) UpdateByID(ctx context.Context, id uint64, org domain.Org) (domain.Org, error) {
+func (uc *UseCase) UpdateByID(ctx context.Context, id uint64, org domain.OrgDTO) (domain.Org, error) {
 	return uc.r.UpdateByID(ctx, id, org)
 }
 
