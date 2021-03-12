@@ -7,6 +7,7 @@ import (
 
 	"github.com/alexander-melentyev/bizzen/internal/domain"
 	"github.com/alexander-melentyev/bizzen/internal/pkg/query"
+	"github.com/alexander-melentyev/bizzen/internal/pkg/respfmt"
 	"github.com/alexander-melentyev/bizzen/internal/pkg/uri"
 	"github.com/gin-gonic/gin"
 )
@@ -48,13 +49,13 @@ func (h *Handler) Create(c *gin.Context) {
 	var org domain.OrgDTO
 
 	if err := c.ShouldBindJSON(&org); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
 
 	if err := h.org.Create(c.Request.Context(), org); err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 
 		return
 	}
@@ -78,20 +79,20 @@ func (h *Handler) ReadAll(c *gin.Context) {
 	var p query.Pagination
 
 	if err := c.ShouldBindQuery(&p); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
 
 	res, err := h.org.ReadAll(c.Request.Context(), p.Limit, p.Offset)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": res,
+	c.JSON(http.StatusOK, respfmt.Fmt{
+		Data: res,
 	})
 }
 
@@ -110,7 +111,7 @@ func (h *Handler) ReadByID(c *gin.Context) {
 	var id uri.ID
 
 	if err := c.ShouldBindUri(&id); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
@@ -118,16 +119,16 @@ func (h *Handler) ReadByID(c *gin.Context) {
 	res, err := h.org.ReadByID(c.Request.Context(), id.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.AbortWithStatus(http.StatusNotFound)
+			respfmt.Err(c, http.StatusNotFound, "not found", err)
 		} else {
-			c.AbortWithStatus(http.StatusInternalServerError)
+			respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 		}
 
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": res,
+	c.JSON(http.StatusOK, respfmt.Fmt{
+		Data: res,
 	})
 }
 
@@ -146,7 +147,7 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	var id uri.ID
 
 	if err := c.ShouldBindUri(&id); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
@@ -154,20 +155,20 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	var p query.Pagination
 
 	if err := c.ShouldBindQuery(&p); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
 
 	res, err := h.org.ReadHistoryByID(c.Request.Context(), id.ID, p.Limit, p.Offset)
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": res,
+	c.JSON(http.StatusOK, respfmt.Fmt{
+		Data: res,
 	})
 }
 
@@ -188,7 +189,7 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 	var id uri.ID
 
 	if err := c.ShouldBindUri(&id); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
@@ -196,7 +197,7 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 	var org domain.OrgDTO
 
 	if err := c.ShouldBindJSON(&org); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
+		respfmt.Err(c, http.StatusBadRequest, "bad request", err)
 
 		return
 	}
@@ -204,16 +205,16 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 	res, err := h.org.UpdateByID(c.Request.Context(), id.ID, org)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.AbortWithStatus(http.StatusNotFound)
+			respfmt.Err(c, http.StatusNotFound, "not found", err)
 		} else {
-			c.AbortWithStatus(http.StatusInternalServerError)
+			respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 		}
 
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": res,
+	c.JSON(http.StatusOK, respfmt.Fmt{
+		Data: res,
 	})
 }
 
@@ -240,9 +241,9 @@ func (h *Handler) SoftDeleteByID(c *gin.Context) {
 
 	if err := h.org.SoftDeleteByID(c.Request.Context(), id.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.AbortWithStatus(http.StatusNotFound)
+			respfmt.Err(c, http.StatusNotFound, "not found", err)
 		} else {
-			c.AbortWithStatus(http.StatusInternalServerError)
+			respfmt.Err(c, http.StatusInternalServerError, "internal server error", err)
 		}
 
 		return
