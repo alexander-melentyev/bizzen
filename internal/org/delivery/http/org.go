@@ -33,9 +33,19 @@ func NewHandler(r *gin.RouterGroup, o domain.OrgUseCase) {
 	}
 }
 
-// Create -.
+// Create - handler for creating a new organization.
+// @Tags org
+// @Summary Creating a new organization
+// @ID create-org
+// @Accept  json
+// @Produce  json
+// @Param input body domain.OrgDTO true "organization data"
+// @Success 201 {object} object "created"
+// @Failure 400 {object} object "bad request"
+// @Failure 500 {object} object "internal server error"
+// @Router /org [POST]
 func (h *Handler) Create(c *gin.Context) {
-	var org domain.Org
+	var org domain.OrgDTO
 
 	if err := c.ShouldBindJSON(&org); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -52,7 +62,18 @@ func (h *Handler) Create(c *gin.Context) {
 	c.AbortWithStatus(http.StatusCreated)
 }
 
-// ReadAll -.
+// ReadAll - handler for getting a organizations list.
+// @Tags org
+// @Summary Getting a organizations list
+// @ID read-all-org
+// @Accept  json
+// @Produce  json
+// @Param limit query int true "limit"
+// @Param offset query int true "offset"
+// @Success 200 {object} object "ok"
+// @Failure 400 {object} object "bad request"
+// @Failure 500 {object} object "internal server error"
+// @Router /org [GET]
 func (h *Handler) ReadAll(c *gin.Context) {
 	var p query.Pagination
 
@@ -74,7 +95,17 @@ func (h *Handler) ReadAll(c *gin.Context) {
 	})
 }
 
-// ReadByID -.
+// ReadByID - handler for getting organization by ID.
+// @Tags org
+// @Summary Getting organization by ID
+// @ID read-org-by-id
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Organization ID"
+// @Success 200 {object} object "ok"
+// @Failure 400 {object} object "bad request"
+// @Failure 500 {object} object "internal server error"
+// @Router /org/{id} [GET]
 func (h *Handler) ReadByID(c *gin.Context) {
 	var id uri.ID
 
@@ -100,7 +131,17 @@ func (h *Handler) ReadByID(c *gin.Context) {
 	})
 }
 
-// ReadHistoryByID -.
+// ReadHistoryByID - handler for getting organization row changes in table.
+// @Tags org
+// @Summary Getting organization row changes in table
+// @ID read-org-history-by-id
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Organization ID"
+// @Success 200 {object} object "ok"
+// @Failure 400 {object} object "bad request"
+// @Failure 500 {object} object "internal server error"
+// @Router /org/{id}/history [GET]
 func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	var id uri.ID
 
@@ -130,7 +171,19 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	})
 }
 
-// UpdateByID -.
+// UpdateByID - updating organization data.
+// @Tags org
+// @Summary Updating organization data
+// @ID update-org-by-id
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Organization ID"
+// @Param input body domain.OrgDTO true "organization data"
+// @Success 200 {object} object "ok"
+// @Failure 400 {object} object "bad request"
+// @Failure 404 {object} object "not found"
+// @Failure 500 {object} object "internal server error"
+// @Router /org/{id} [PUT]
 func (h *Handler) UpdateByID(c *gin.Context) {
 	var id uri.ID
 
@@ -140,7 +193,7 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 		return
 	}
 
-	var org domain.Org
+	var org domain.OrgDTO
 
 	if err := c.ShouldBindJSON(&org); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -164,7 +217,18 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 	})
 }
 
-// SoftDeleteByID -.
+// SoftDeleteByID - filling deletion data.
+// @Tags org
+// @Summary Filling deletion data
+// @ID soft-delete-org-by-id
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Organization ID"
+// @Success 200 {object} object "ok"
+// @Failure 400 {object} object "bad request"
+// @Failure 404 {object} object "not found"
+// @Failure 500 {object} object "internal server error"
+// @Router /org/{id} [DELETE]
 func (h *Handler) SoftDeleteByID(c *gin.Context) {
 	var id uri.ID
 
