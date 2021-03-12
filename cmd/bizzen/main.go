@@ -13,9 +13,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// @title bizzen app API
+// @title bizzen application API
 // @version 1.0
-// @description API Server for bizzen Application
+// @description API server for bizzen application
 // @contact.name Aleksandr Melentyev
 // @contact.email aleksandr.melentyev@nexign.com
 // @BasePath /api/v1
