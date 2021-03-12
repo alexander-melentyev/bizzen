@@ -218,3 +218,9 @@ paths:
       tags:
       - org
 swagger: "2.0"
+x-apigw:
+  auth: true
+  domains: enterprise
+  scopes: internal
+x-app_name: bizzen
+x-app_version: 1.0.0

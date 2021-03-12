@@ -19,6 +19,9 @@ import (
 // @contact.name Aleksandr Melentyev
 // @contact.email aleksandr.melentyev@nexign.com
 // @BasePath /api/v1
+// @x-apigw {"scopes": "internal", "domains": "enterprise", "auth": true}
+// @x-app_name "bizzen"
+// @x-app_version "1.0.0"
 
 func main() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
