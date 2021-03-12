@@ -5,12 +5,25 @@ definitions:
       name:
         type: string
     type: object
+  respfmt.Fmt:
+    properties:
+      data:
+        type: object
+      developerMessage:
+        type: string
+      serviceName:
+        type: string
+      totalCount:
+        type: integer
+      userMessage:
+        type: string
+    type: object
 info:
   contact:
     email: aleksandr.melentyev@nexign.com
     name: Aleksandr Melentyev
-  description: API Server for bizzen Application
-  title: bizzen app API
+  description: API server for bizzen application
+  title: bizzen application API
   version: "1.0"
 paths:
   /org:
@@ -35,22 +48,24 @@ paths:
         "200":
           description: ok
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Getting a organizations list
+      tags:
+      - org
     post:
       consumes:
       - application/json
       operationId: create-org
       parameters:
-      - description: organization data
+      - description: Organization data
         in: body
         name: input
         required: true
@@ -62,16 +77,18 @@ paths:
         "201":
           description: created
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Creating a new organization
+      tags:
+      - org
   /org/{id}:
     delete:
       consumes:
@@ -89,20 +106,22 @@ paths:
         "200":
           description: ok
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "404":
           description: not found
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Filling deletion data
+      tags:
+      - org
     get:
       consumes:
       - application/json
@@ -119,16 +138,18 @@ paths:
         "200":
           description: ok
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Getting organization by ID
+      tags:
+      - org
     put:
       consumes:
       - application/json
@@ -151,20 +172,22 @@ paths:
         "200":
           description: ok
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "404":
           description: not found
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Updating organization data
+      tags:
+      - org
   /org/{id}/history:
     get:
       consumes:
@@ -182,14 +205,16 @@ paths:
         "200":
           description: ok
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "400":
           description: bad request
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
         "500":
           description: internal server error
           schema:
-            type: object
+            $ref: '#/definitions/respfmt.Fmt'
       summary: Getting organization row changes in table
+      tags:
+      - org
 swagger: "2.0"

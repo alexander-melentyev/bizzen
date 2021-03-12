@@ -40,9 +40,9 @@ func NewHandler(r *gin.RouterGroup, o domain.OrgUseCase) {
 // @Accept  json
 // @Produce  json
 // @Param input body domain.OrgDTO true "Organization data"
-// @Success 201 {object} object "created"
-// @Failure 400 {object} object "bad request"
-// @Failure 500 {object} object "internal server error"
+// @Success 201 {object} respfmt.Fmt "created"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org [POST]
 func (h *Handler) Create(c *gin.Context) {
 	var org domain.OrgDTO
@@ -70,9 +70,9 @@ func (h *Handler) Create(c *gin.Context) {
 // @Produce  json
 // @Param limit query int true "limit"
 // @Param offset query int true "offset"
-// @Success 200 {object} object "ok"
-// @Failure 400 {object} object "bad request"
-// @Failure 500 {object} object "internal server error"
+// @Success 200 {object} respfmt.Fmt "ok"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org [GET]
 func (h *Handler) ReadAll(c *gin.Context) {
 	var p query.Pagination
@@ -102,9 +102,9 @@ func (h *Handler) ReadAll(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Organization ID"
-// @Success 200 {object} object "ok"
-// @Failure 400 {object} object "bad request"
-// @Failure 500 {object} object "internal server error"
+// @Success 200 {object} respfmt.Fmt "ok"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org/{id} [GET]
 func (h *Handler) ReadByID(c *gin.Context) {
 	var id uri.ID
@@ -138,9 +138,9 @@ func (h *Handler) ReadByID(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Organization ID"
-// @Success 200 {object} object "ok"
-// @Failure 400 {object} object "bad request"
-// @Failure 500 {object} object "internal server error"
+// @Success 200 {object} respfmt.Fmt "ok"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org/{id}/history [GET]
 func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	var id uri.ID
@@ -179,10 +179,10 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 // @Produce  json
 // @Param id path int true "Organization ID"
 // @Param input body domain.OrgDTO true "organization data"
-// @Success 200 {object} object "ok"
-// @Failure 400 {object} object "bad request"
-// @Failure 404 {object} object "not found"
-// @Failure 500 {object} object "internal server error"
+// @Success 200 {object} respfmt.Fmt "ok"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 404 {object} respfmt.Fmt "not found"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org/{id} [PUT]
 func (h *Handler) UpdateByID(c *gin.Context) {
 	var id uri.ID
@@ -224,10 +224,10 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Organization ID"
-// @Success 200 {object} object "ok"
-// @Failure 400 {object} object "bad request"
-// @Failure 404 {object} object "not found"
-// @Failure 500 {object} object "internal server error"
+// @Success 200 {object} respfmt.Fmt "ok"
+// @Failure 400 {object} respfmt.Fmt "bad request"
+// @Failure 404 {object} respfmt.Fmt "not found"
+// @Failure 500 {object} respfmt.Fmt "internal server error"
 // @Router /org/{id} [DELETE]
 func (h *Handler) SoftDeleteByID(c *gin.Context) {
 	var id uri.ID
