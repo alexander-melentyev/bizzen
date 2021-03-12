@@ -1,0 +1,195 @@
+basePath: /api/v1
+definitions:
+  domain.OrgDTO:
+    properties:
+      name:
+        type: string
+    type: object
+info:
+  contact:
+    email: aleksandr.melentyev@nexign.com
+    name: Aleksandr Melentyev
+  description: API Server for bizzen Application
+  title: bizzen app API
+  version: "1.0"
+paths:
+  /org:
+    get:
+      consumes:
+      - application/json
+      operationId: read-all-org
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Getting a organizations list
+    post:
+      consumes:
+      - application/json
+      operationId: create-org
+      parameters:
+      - description: organization data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.OrgDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Creating a new organization
+  /org/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: soft-delete-org-by-id
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "404":
+          description: not found
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Filling deletion data
+    get:
+      consumes:
+      - application/json
+      operationId: read-org-by-id
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Getting organization by ID
+    put:
+      consumes:
+      - application/json
+      operationId: update-org-by-id
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: organization data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.OrgDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "404":
+          description: not found
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Updating organization data
+  /org/{id}/history:
+    get:
+      consumes:
+      - application/json
+      operationId: read-org-history-by-id
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: object
+        "400":
+          description: bad request
+          schema:
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            type: object
+      summary: Getting organization row changes in table
+swagger: "2.0"
