@@ -39,7 +39,7 @@ func NewHandler(r *gin.RouterGroup, o domain.OrgUseCase) {
 // @ID create-org
 // @Accept  json
 // @Produce  json
-// @Param input body domain.OrgDTO true "organization data"
+// @Param input body domain.OrgDTO true "Organization data"
 // @Success 201 {object} object "created"
 // @Failure 400 {object} object "bad request"
 // @Failure 500 {object} object "internal server error"
