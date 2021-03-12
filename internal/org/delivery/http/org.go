@@ -171,7 +171,7 @@ func (h *Handler) ReadHistoryByID(c *gin.Context) {
 	})
 }
 
-// UpdateByID - updating organization data.
+// UpdateByID - handler for updating organization data.
 // @Tags org
 // @Summary Updating organization data
 // @ID update-org-by-id
@@ -217,7 +217,7 @@ func (h *Handler) UpdateByID(c *gin.Context) {
 	})
 }
 
-// SoftDeleteByID - filling deletion data.
+// SoftDeleteByID - handler for filling deletion data.
 // @Tags org
 // @Summary Filling deletion data
 // @ID soft-delete-org-by-id
